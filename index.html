@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字コードチェッカー</title>
+    <style>
+        /* デフォルト（ライトモード）の変数設定 */
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #ddd;
+            --header-bg: #f8f9fa;
+            --accent-color: #ff69b4;
+        }
+
+        /* ダークモードの変数設定 */
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #f4f4f4;
+            --border-color: #444;
+            --header-bg: #333333;
+            --accent-color: #ffb6c1;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* カード（全体枠）のデザイン */
+        .code-container {
+            width: 400px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        /* ヘルパー（タイトルとアイコンを置く場所） */
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* アイコンボタンをまとめるエリア */
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px;
+            color: var(--text-color);
+            transition: transform 0.2s;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* 文字コードを表示するコードエリア */
+        .code-body {
+            padding: 15px;
+            margin: 0;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            min-height: 50px;
+        }
+
+        /* コピー完了メッセージ */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="code-container">
+        <!-- タイトルとアイコンを表示するヘッダー -->
+        <div class="code-header">
+            <span>文字コード情報 (UTF-8)</span>
+            <div class="code-actions">
+                <!-- ダークモード切り替えアイコン -->
+                <button class="icon-btn" id="theme-toggle" title="テーマ切り替え">🌙</button>
+                <!-- コピー用アイコン -->
+                <button class="icon-btn" id="copy-btn" title="コピーする">📋</button>
+            </div>
+        </div>
+        <!-- 文字コードを表示する中身 -->
+        <pre class="code-body" id="code-content">U+3042 (あ)
+U+3044 (い)
+U+3046 (う)</pre>
+    </div>
+
+    <!-- コピー成功時のポップアップ -->
+    <div class="toast" id="toast">コピーできたよ！✨</div>
+
+    <script>
+        // 1. ライト・ダークモードの切り替え
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.removeAttribute('data-theme');
+                themeToggleBtn.textContent = '🌙'; // ライト時のアイコン
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeToggleBtn.textContent = '☀️'; // ダーク時のアイコン
+            }
+        });
+
+        // 2. クリップボードへのコピー機能
+        const copyBtn = document.getElementById('copy-btn');
+        const codeContent = document.getElementById('code-content');
+        const toast = document.getElementById('toast');
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeContent.textContent).then(() => {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 1500);
+            });
+        });
+    </script>
+
+</body>
+</html>
