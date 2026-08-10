@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>文字コードチェッカー</title>
     <style>
-        /* ライトモードの色 */
+        /* ページ全体は普通の明るいデザイン */
         body {
             background-color: #f0f2f5;
             color: #333;
@@ -24,7 +24,6 @@
             overflow: hidden;
         }
 
-        /* ヘルパー（タイトルとアイコン） */
         .box-header {
             display: flex;
             justify-content: space-between;
@@ -36,7 +35,6 @@
             font-weight: bold;
         }
 
-        /* アイコンボタン */
         .btn {
             background: none;
             border: none;
@@ -45,50 +43,35 @@
             padding: 2px 5px;
         }
 
-        /* コード表示エリア */
+        /* ─── コード表示エリア（デフォルト：ライトモード） ─── */
         .box-body {
             padding: 12px;
             margin: 0;
             font-family: monospace;
             font-size: 14px;
-            background: #fff;
-            color: #333;
+            background: #ffffff;
+            color: #333333;
             white-space: pre-wrap;
+            transition: background 0.2s, color 0.2s; /* 切り替えをなめらかに */
         }
 
-        /* ダークモード（bodyに darkクラスがついたとき） */
-        body.dark {
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        body.dark .box {
+        /* ─── コード表示エリアがダークモードになったとき ─── */
+        .box-body.dark {
             background: #1e1e1e;
-            border-color: #444;
-        }
-        body.dark .box-header {
-            background: #2d2d2d;
-            border-color: #444;
-            color: #f0f0f0;
-        }
-        body.dark .box-body {
-            background: #1e1e1e;
-            color: #f0f0f0;
-        }
-        body.dark .btn {
-            color: #f0f0f0;
+            color: #dcdcaa; /* コードエディタっぽい色味にするよ！ */
         }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <!-- 1. コードタイトル ＆ アイコンたち -->
+        <!-- タイトル ＆ アイコンたち -->
         <div class="box-header">
-            <span id="code-title">文字コード: UTF-8</span>
+            <span>文字コード: UTF-8</span>
             <div>
-                <!-- 2. ダークモード切り替えアイコン -->
-                <button class="btn" id="theme-btn" title="ダークモード切り替え">🌙</button>
-                <!-- 3. コピー用アイコン -->
+                <!-- コードエリア専用のダークモード切り替えアイコン -->
+                <button class="btn" id="theme-btn" title="コード部分のダークモード切り替え">🌙</button>
+                <!-- コピー用アイコン -->
                 <button class="btn" id="copy-btn" title="コピー">📋</button>
             </div>
         </div>
@@ -98,20 +81,21 @@ U+3044 (い)</pre>
     </div>
 
     <script>
-        // ダークモード切り替え
+        // コードエリアだけのダークモード切り替え
         const themeBtn = document.getElementById('theme-btn');
+        const codeText = document.getElementById('code-text');
+
         themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
+            codeText.classList.toggle('dark');
             // アイコンの切り替え
-            themeBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+            themeBtn.textContent = codeText.classList.contains('dark') ? '☀️' : '🌙';
         });
 
         // コピー機能
         const copyBtn = document.getElementById('copy-btn');
-        const codeText = document.getElementById('code-text');
         copyBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(codeText.textContent).then(() => {
-                alert('コピーしたよ！'); // シンプルにアラートでお知らせ
+                alert('コピーしたよ！');
             });
         });
     </script>
