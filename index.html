@@ -33,9 +33,6 @@
             background-color: #252526;
             color: #ffffff;
         }
-        input[type="url"]:focus {
-            outline: 1px solid #007acc;
-        }
         button {
             padding: 12px 24px;
             font-size: 16px;
@@ -46,20 +43,17 @@
             cursor: pointer;
             font-weight: bold;
         }
-        button:hover {
-            background-color: #1177bb;
-        }
+        button:hover { background-color: #1177bb; }
         .code-container {
             border: 1px solid #3c3c3c;
             border-radius: 6px;
             overflow: hidden;
             background-color: #272822;
         }
-        /* Prism.js の表示枠調整 */
         pre[class*="language-"] {
             margin: 0;
             max-height: 600px;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
         }
     </style>
@@ -67,8 +61,6 @@
 <body>
 
     <h2>WEBページソースコード取得 & ハイライター</h2>
-    <p>URLを入力して「取得」を押すと、HTML/CSS/JSを自動判別してシンタックスハイライト表示します。</p>
-
     <div class="input-group">
         <input type="url" id="urlInput" placeholder="https://example.com" value="https://example.com">
         <button onclick="fetchSource()">取得</button>
@@ -76,15 +68,12 @@
 
     <h3>取得結果:</h3>
     <div class="code-container">
-        <!-- class="line-numbers" で行番号を表示、class="language-markup" でHTML指定 -->
         <pre class="line-numbers"><code id="result" class="language-markup">URLを入力して「取得」ボタンを押してください</code></pre>
     </div>
 
-    <!-- Prism.js コアライブラリ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.css"></script>
+    <!-- Prism.js 読み込み -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <!-- 行番号表示プラグインのJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
     <script>
@@ -98,31 +87,28 @@
             }
 
             resultElement.textContent = "取得中...";
-            // 一度既存のハイライト装飾を破棄
             Prism.highlightElement(resultElement);
 
-            // CORSの制限を回避するため、無料のCORSプロキシサービス（allorigins）を使用
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+            // 高速・高安定な CORS プロキシに変更
+            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 
             try {
                 const response = await fetch(proxyUrl);
                 if (!response.ok) {
-                    throw new Error('通信エラーが発生しました');
+                    throw new Error(`HTTPエラー (ステータス: ${response.status})`);
                 }
                 
-                const data = await response.json();
+                // テキスト形式でHTMLをそのまま取得
+                const htmlText = await response.text();
                 
-                if (data.contents) {
-                    // 1. テキストをセット (HTML文字は自動エスケープ)
-                    resultElement.textContent = data.contents;
-                    
-                    // 2. Prism.js を再実行してハイライトと行番号を反映
-                    Prism.highlightElement(resultElement);
-                } else {
-                    resultElement.textContent = "ソースコードを取得できませんでした。";
-                }
+                resultElement.textContent = htmlText;
+                Prism.highlightElement(resultElement);
+
             } catch (err) {
-                resultElement.textContent = "エラー: " + err.message + "\n（URLが正しいか確認してください）";
+                resultElement.textContent = "エラーが発生しました:\n" + err.message + 
+                    "\n\n【考えられる原因】\n" +
+                    "・入力したURLが正しいか確認してください（https:// から入力）\n" +
+                    "・ブラウザのデベロッパーツール(F12)のConsoleに詳細エラーが出ている可能性があります";
             }
         }
     </script>
