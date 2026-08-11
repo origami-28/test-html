@@ -1,115 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>文字コードチェッカー</title>
-    <style>
-        /* ページ全体は普通の明るいデザイン */
-        body {
-            background-color: #f0f2f5;
-            color: #333;
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+<div class="container">
+  <!-- 左サイドバー -->
+  <aside class="sidebar">
+    <h2>メニュー</h2>
+    <ul>
+      <li><a href="#">ホーム</a></li>
+      <li><a href="#">お知らせ</a></li>
+      <li><a href="#">お問い合わせ</a></li>
+    </ul>
+  </aside>
 
-        .box {
-            width: 350px;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .box-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #e9ecef;
-            border-bottom: 1px solid #ccc;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 2px 5px;
-        }
-
-        /* ─── コード表示エリア（デフォルト：ライトモード） ─── */
-        .box-body {
-            padding: 12px;
-            margin: 0;
-            font-family: monospace;
-            font-size: 14px;
-            background: #ffffff;
-            color: #333333;
-            white-space: pre-wrap;
-            transition: background 0.2s, color 0.2s; /* 切り替えをなめらかに */
-        }
-
-        /* ─── コード表示エリアがダークモードになったとき ─── */
-        .box-body.dark {
-            background: #1e1e1e;
-            color: #dcdcaa; /* コードエディタっぽい色味にするよ！ */
-        }
-    </style>
-</head>
-<body>
-
-    <div class="box">
-        <!-- タイトル ＆ アイコンたち -->
-        <div class="box-header">
-            <span>文字コード: UTF-8</span>
-            <div>
-                <!-- コードエリア専用のダークモード切り替えアイコン -->
-                <button class="btn" id="theme-btn" title="コード部分のダークモード切り替え">🌙</button>
-                <!-- コピー用アイコン -->
-                <button class="btn" id="copy-btn" title="コピー">📋</button>
-            </div>
-        </div>
-        <!-- コード表示エリア -->
-        <pre class="box-body" id="code-text">U+3042 (あ)
-U+3044 (い)</pre>
-    </div>
-
-    <script>
-        // コードエリアだけのダークモード切り替え
-        const themeBtn = document.getElementById('theme-btn');
-        const codeText = document.getElementById('code-text');
-
-        themeBtn.addEventListener('click', () => {
-            codeText.classList.toggle('dark');
-            // アイコンの切り替え
-            themeBtn.textContent = codeText.classList.contains('dark') ? '☀️' : '🌙';
-        });
-
-        // コピー機能
-        const copyBtn = document.getElementById('copy-btn');
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(codeText.textContent).then(() => {
-                alert('コピーしたよ！');
-            });
-        });
-    </script>
-
-</body>
-</html>
-<ul>
-<li><p>macOS:</p>
-<div></div><devsite-code><pre class="devsite-click-to-copy" translate="no" dir="ltr" is-upgraded syntax="Bash"><code translate="no" dir="ltr">open<span class="devsite-syntax-w"> </span>-a<span class="devsite-syntax-w"> </span><span class="devsite-syntax-s2">"Google Chrome"</span><span class="devsite-syntax-w"> </span>--args<span class="devsite-syntax-w"> </span>--auto-open-devtools-for-tabs
-</code></pre></devsite-code></li>
-<li><p>Windows:</p>
-<div></div><devsite-code><pre class="devsite-click-to-copy" translate="no" dir="ltr" is-upgraded syntax="Bash"><code translate="no" dir="ltr">start<span class="devsite-syntax-w"> </span>chrome<span class="devsite-syntax-w"> </span>--auto-open-devtools-for-tabs
-</code></pre></devsite-code></li>
-<li><p>Linux:</p>
-<div></div><devsite-code><pre class="devsite-click-to-copy" translate="no" dir="ltr" is-upgraded syntax="Bash"><code translate="no" dir="ltr">google-chrome<span class="devsite-syntax-w"> </span>--auto-open-devtools-for-tabs
-</code></pre></devsite-code></li>
-</ul>
+  <!-- メインコンテンツ -->
+  <main class="main-content">
+    <h1>メインタイトル</h1>
+    <p>ここにページのメインとなるコンテンツを記述します。</p>
+  </main>
+</div>
