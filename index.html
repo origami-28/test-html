@@ -42,8 +42,28 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            transition: background-color 0.2s;
         }
         button:hover { background-color: #1177bb; }
+
+        /* コピーボタン専用スタイル */
+        button.copy-btn {
+            background-color: #388e3c;
+        }
+        button.copy-btn:hover {
+            background-color: #2e7d32;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .result-header h3 {
+            margin: 0;
+        }
+
         .code-container {
             border: 1px solid #3c3c3c;
             border-radius: 6px;
@@ -66,7 +86,11 @@
         <button onclick="fetchSource()">取得</button>
     </div>
 
-    <h3>取得結果:</h3>
+    <div class="result-header">
+        <h3>取得結果:</h3>
+        <button id="copyBtn" class="copy-btn" onclick="copyCode()">コピー</button>
+    </div>
+
     <div class="code-container">
         <pre class="line-numbers"><code id="result" class="language-markup">URLを入力して「取得」ボタンを押してください</code></pre>
     </div>
@@ -109,6 +133,38 @@
                     "\n\n【考えられる原因】\n" +
                     "・入力したURLが正しいか確認してください（https:// から入力）\n" +
                     "・ブラウザのデベロッパーツール(F12)のConsoleに詳細エラーが出ている可能性があります";
+            }
+        }
+
+        // --- 今回追加したコピー処理 ---
+        async function copyCode() {
+            const resultElement = document.getElementById('result');
+            const copyBtn = document.getElementById('copyBtn');
+            const codeText = resultElement.textContent;
+
+            // 初期表示や取得中の状態ではコピーをガード
+            if (!codeText || codeText === "URLを入力して「取得」ボタンを押してください" || codeText === "取得中...") {
+                alert('コピーするソースコードがありません');
+                return;
+            }
+
+            try {
+                // クリップボードへコピーを実行
+                await navigator.clipboard.writeText(codeText);
+
+                // ボタンのテキストを一時的に変更（ユーザーへの通知）
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'コピー完了！';
+                copyBtn.disabled = true;
+
+                // 2秒後に元の表記に戻す
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.disabled = false;
+                }, 2000);
+
+            } catch (err) {
+                alert('コピーに失敗しました: ' + err.message);
             }
         }
     </script>
